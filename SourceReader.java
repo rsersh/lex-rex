@@ -1,6 +1,7 @@
 package lexer;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  *  This class is used to manage the source program input stream;
@@ -9,16 +10,19 @@ import java.io.*;
 */
 public class SourceReader {
     private BufferedReader source;
+    //for line-by-line access
+    private static ArrayList<String> sourceLineList = new ArrayList<String>();   
     private int lineno = 0,   // line number of source program
         position;     // position of last character processed
     private boolean isPriorEndLine = true;  // if true then last character read was newline
                              // so read in the next line
     private String nextLine;
-/*
+
+    /*
     public static void main(String args[]) {
         SourceReader s = null;
         try {
-            s = new SourceReader("t");
+            s = new SourceReader("simple.x");
             while (true) {
                 char ch = s.read();
                 System.out.println("Char: " + ch + " Line: " + s.lineno +
@@ -31,6 +35,7 @@ public class SourceReader {
         }
     }
 */
+    
 
 /**
  *  Construct a new SourceReader
@@ -38,9 +43,10 @@ public class SourceReader {
  *  @exception IOException is thrown if there is an I/O problem
 */
     public SourceReader(String sourceFile) throws IOException {
-    	System.out.println("Source file: "+sourceFile);
-    	System.out.println("user.dir: " + System.getProperty("user.dir"));
+    	//System.out.println("Source file: "+sourceFile);
+    	//System.out.println("user.dir: " + System.getProperty("user.dir"));
         source = new BufferedReader(new FileReader(sourceFile));
+        sourceLineList.add("DUMMY STRING");
     }
 
     void close() {
@@ -62,6 +68,8 @@ public class SourceReader {
             nextLine = source.readLine();
             if (nextLine != null) {
                 System.out.println("READLINE:   "+nextLine);
+                 //add code here to save line to an array for public printArray function
+                sourceLineList.add(nextLine);
             }
             isPriorEndLine = false;
         }
@@ -77,6 +85,7 @@ public class SourceReader {
             isPriorEndLine = true;
             return ' ';
         }
+       
         return nextLine.charAt(position);
     }
 
@@ -92,5 +101,16 @@ public class SourceReader {
 */
     public int getLineno() {
         return lineno;
+    }
+    
+/**
+ * @return the source file line-by-line, preceeded by line number
+*/
+    public static void printSourceList() {
+        int lineno;
+        for(lineno = 1; lineno<sourceLineList.size(); lineno++) {
+            System.out.println("" + lineno + ".   " + 
+                    sourceLineList.get(lineno));
+        }
     }
 }

@@ -13,7 +13,7 @@ package lexer;
 public class Lexer {
     private boolean atEOF = false;
     private char ch;     // next character to process
-    private SourceReader source;
+    private static SourceReader source;
     
     // positions in line of current token
     private int startPosition, endPosition, lineNumber; 
@@ -43,9 +43,12 @@ public class Lexer {
                    " line: " + tok.getLineNumber() + " ";
                 
                 System.out.println(p);
-                //System.out.println(p + ": "+lex.source.getLineno());
-            }
-        } catch (Exception e) {}
+            }  
+            
+        } catch (Exception e) {}  
+        
+        System.out.println();
+        SourceReader.printSourceList();
     }
 
  
