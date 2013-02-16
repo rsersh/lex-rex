@@ -8,7 +8,7 @@ package lexer;
  *  </pre>
 */
 public class Token {
-  private int leftPosition,rightPosition;
+  private int leftPosition,rightPosition,linenum;
   private Symbol symbol;
 
 /**
@@ -16,9 +16,10 @@ public class Token {
  *  @param leftPosition is the source file column where the Token begins
  *  @param rightPosition is the source file column where the Token ends
 */
-  public Token(int leftPosition, int rightPosition, Symbol sym) {
+  public Token(int leftPosition, int rightPosition, int lineNumber, Symbol sym) {
    this.leftPosition = leftPosition;
    this.rightPosition = rightPosition;
+   this.linenum = lineNumber;
    this.symbol = sym;
   }
 
@@ -29,7 +30,8 @@ public class Token {
   public void print() {
     System.out.println("       " + symbol.toString() + 
                        "             left: " + leftPosition +
-                       " right: " + rightPosition);
+                       " right: " + rightPosition +
+                        "line no.: " + linenum);
     return;
   }
 
@@ -43,6 +45,10 @@ public class Token {
 
   public int getRightPosition() {
     return rightPosition;
+  }
+  
+  public int getLineNumber() {
+      return linenum;
   }
 
 /**
