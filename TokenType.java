@@ -10,6 +10,7 @@ public class TokenType {
    public TokenType() {
      tokens.put(Tokens.Program, Symbol.symbol("program",Tokens.Program));
      tokens.put(Tokens.Int, Symbol.symbol("int",Tokens.Int));
+     tokens.put(Tokens.Float, Symbol.symbol("float",Tokens.Float));
      tokens.put(Tokens.BOOLean, Symbol.symbol("boolean",Tokens.BOOLean));
      tokens.put(Tokens.If, Symbol.symbol("if",Tokens.If));
      tokens.put(Tokens.Then, Symbol.symbol("then",Tokens.Then));
@@ -19,6 +20,7 @@ public class TokenType {
      tokens.put(Tokens.Return, Symbol.symbol("return",Tokens.Return));
      tokens.put(Tokens.Identifier, Symbol.symbol("<id>",Tokens.Identifier));
      tokens.put(Tokens.INTeger, Symbol.symbol("<int>",Tokens.INTeger));
+     tokens.put(Tokens.FLOat, Symbol.symbol("<float>",Tokens.FLOat));
      tokens.put(Tokens.LeftBrace, Symbol.symbol("{",Tokens.LeftBrace));
      tokens.put(Tokens.RightBrace, Symbol.symbol("}",Tokens.RightBrace));
      tokens.put(Tokens.LeftParen, Symbol.symbol("(",Tokens.LeftParen));

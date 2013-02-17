@@ -17,6 +17,7 @@ public class Lexer {
     
     // positions in line of current token
     private int startPosition, endPosition, lineNumber; 
+    private boolean floatFlag = false;
 
     public Lexer(String sourceFile) throws Exception {
         new TokenType();  // init token table
@@ -47,7 +48,7 @@ public class Lexer {
             
         } catch (Exception e) {}  
         
-        System.out.println();
+        System.out.println("\n");
         SourceReader.printSourceList();
     }
 
@@ -78,9 +79,14 @@ public class Lexer {
  *  @return the int Token
 */
     public Token newNumberToken(String number,int startPosition,int endPosition,
-            int lineNumber) {
-        return new Token(startPosition,endPosition,lineNumber,
-            Symbol.symbol(number,Tokens.INTeger));
+            int lineNumber, boolean flag) {
+        if (flag == true) {
+            return new Token(startPosition, endPosition, lineNumber,
+                Symbol.symbol(number, Tokens.FLOat));
+        } else {
+            return new Token(startPosition,endPosition,lineNumber,
+                Symbol.symbol(number,Tokens.INTeger));
+        }
     }
 
 /**
@@ -159,10 +165,21 @@ public class Lexer {
                     number += ch;
                     ch = source.read();
                 } while (Character.isDigit(ch));
+                if (Character.toString(ch).matches(".")) {
+                    floatFlag = true;
+                    number += ch;
+                    ch = source.read();
+                    do {
+                        endPosition++;
+                        number += ch;
+                        ch = source.read();
+                    } while (Character.isDigit(ch));
+                }
             } catch (Exception e) {
                 atEOF = true;
             }
-            return newNumberToken(number,startPosition,endPosition,lineNumber);
+            return newNumberToken(number,startPosition,endPosition,lineNumber,
+                    floatFlag);
         }
         
         // At this point the only tokens to check for are one or two

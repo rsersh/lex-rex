@@ -1,5 +1,6 @@
 Program program
 Int int
+Float float
 BOOLean boolean
 If if
 Then then
@@ -9,6 +10,7 @@ Function function
 Return return
 Identifier <id>
 INTeger <int>
+FLOat <float>
 LeftBrace {
 RightBrace }
 LeftParen (
