@@ -17,7 +17,7 @@ public class Lexer {
     
     // positions in line of current token
     private int startPosition, endPosition, lineNumber; 
-    private boolean floatFlag = false;
+    private boolean floatFlag = false;  //for literal tokens: type int or float
 
     public Lexer(String sourceFile) throws Exception {
         new TokenType();  // init token table
@@ -35,7 +35,8 @@ public class Lexer {
                 
                 String p = "";
                 if ((tok.getKind() == Tokens.Identifier) ||
-                    (tok.getKind() == Tokens.INTeger))
+                    (tok.getKind() == Tokens.INTeger) || 
+                        tok.getKind() == Tokens.FLOat)
                     { p += tok.toString(); }
                 else { p += TokenType.tokens.get(tok.getKind()); }
                 
@@ -59,6 +60,7 @@ public class Lexer {
  *  @param id is the String just scanned - it's either an id or reserved word
  *  @param startPosition is the column in the source file where the token begins
  *  @param endPosition is the column in the source file where the token ends
+ *  @param lineNumber is the line number in the source file where the token resides
  *  @return the Token; either an id or one for the reserved words
 */
     public Token newIdToken(String id,int startPosition,int endPosition,
@@ -74,16 +76,18 @@ public class Lexer {
  *  until we actually run the program; i.e. the numeric constraints of the
  *  hardware used to compile the source program are not used
  *  @param number is the int String just scanned
- *  @param startPosition is the column in the source file where the int begins
- *  @param endPosition is the column in the source file where the int ends
+ *  @param startPosition is the column in the source file where the number begins
+ *  @param endPosition is the column in the source file where the number ends
+ *  @param lineNumber is the line number in the source file where the number
+ *  @param flag indicates whethere number is a float (true) or int (false)
  *  @return the int Token
 */
     public Token newNumberToken(String number,int startPosition,int endPosition,
             int lineNumber, boolean flag) {
-        if (flag == true) {
+        if (flag == true) {     //number is a float
             return new Token(startPosition, endPosition, lineNumber,
                 Symbol.symbol(number, Tokens.FLOat));
-        } else {
+        } else {        //number is an int
             return new Token(startPosition,endPosition,lineNumber,
                 Symbol.symbol(number,Tokens.INTeger));
         }
@@ -95,6 +99,7 @@ public class Lexer {
  *  @param s is the String representing the token
  *  @param startPosition is the column in the source file where the token begins
  *  @param endPosition is the column in the source file where the token ends
+ *  @param lineNumber is the line number in the source file where the token can be found
  *  @return the Token just found
 */
     public Token makeToken(String s,int startPosition,int endPosition,
@@ -165,6 +170,7 @@ public class Lexer {
                     number += ch;
                     ch = source.read();
                 } while (Character.isDigit(ch));
+                //check for floats
                 if (Character.toString(ch).matches(".")) {
                     floatFlag = true;
                     number += ch;
