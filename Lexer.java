@@ -170,16 +170,27 @@ public class Lexer {
                     number += ch;
                     ch = source.read();
                 } while (Character.isDigit(ch));
-                //check for floats
+                ////////////////////////////////////
+                //NEED TO ACCOUNT FOR 2. AND .2 HERE
                 if (Character.toString(ch).matches(".")) {
                     floatFlag = true;
                     number += ch;
                     ch = source.read();
+                    
+                    if (Character.isDigit(ch)) {
+                        do {
+                        endPosition++;
+                        number += ch;
+                        ch = source.read();
+                        } while (Character.isDigit(ch));
+                    } //else if (Character.toString(ch).matches("."))
+                    /*
                     do {
                         endPosition++;
                         number += ch;
                         ch = source.read();
                     } while (Character.isDigit(ch));
+                    */
                 }
             } catch (Exception e) {
                 atEOF = true;
