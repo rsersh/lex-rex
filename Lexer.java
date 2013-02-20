@@ -160,7 +160,7 @@ public class Lexer {
                 atEOF = true;
             }
             return newIdToken(id,startPosition,endPosition,lineNumber);
-        }
+        } //end isJavaIdentifierStart
         if (Character.isDigit(ch)) {
             // return number tokens
             String number = "";
@@ -186,7 +186,24 @@ public class Lexer {
             }
             return newNumberToken(number,startPosition,endPosition,lineNumber,
                     floatFlag);
-        }
+        } //end Character.isDigit(ch)
+        
+        //if character is "." then it is a float that begins with a "." 
+        if (Character.toString(ch).matches(".")) {
+            floatFlag = true;
+            String number = "";
+            try {
+                do {
+                    endPosition++;
+                    number += ch;
+                    ch = source.read();
+                } while (Character.isDigit(ch));
+            } catch (Exception e) {
+                atEOF = true;
+            }
+            return newNumberToken(number,startPosition,endPosition,lineNumber,
+                    floatFlag);
+        } //end if character is a "."
         
         // At this point the only tokens to check for are one or two
         // characters; we must also check for comments that begin with
