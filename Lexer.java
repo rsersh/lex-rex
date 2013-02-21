@@ -169,11 +169,12 @@ public class Lexer {
                     endPosition++;
                     number += ch;
                     ch = source.read();
-                } while (Character.isDigit(ch));
+                } while (Character.isDigit(ch));  //integer case complete
                 ////////////////////////////////////
-                //NEED TO ACCOUNT FOR 2. AND .2 HERE
+                
                 if (Character.toString(ch).matches(".")) {
                     floatFlag = true;
+                    endPosition++;
                     number += ch;
                     ch = source.read();
                     
@@ -183,15 +184,8 @@ public class Lexer {
                         number += ch;
                         ch = source.read();
                         } while (Character.isDigit(ch));
-                    } //else if (Character.toString(ch).matches("."))
-                    /*
-                    do {
-                        endPosition++;
-                        number += ch;
-                        ch = source.read();
-                    } while (Character.isDigit(ch));
-                    */
-                }
+                    } //end if (Character.isDigit(ch))  
+                }  //1.25 float case complete
             } catch (Exception e) {
                 atEOF = true;
             }
@@ -203,12 +197,22 @@ public class Lexer {
         if (Character.toString(ch).matches(".")) {
             floatFlag = true;
             String number = "";
+            //added 3 lines below
+            endPosition++;
+            number += ch;
+            
             try {
-                do {
-                    endPosition++;
-                    number += ch;
-                    ch = source.read();
-                } while (Character.isDigit(ch));
+                ch = source.read();
+                if (Character.isDigit(ch)) {
+                    do {
+                        endPosition++;
+                        number += ch;
+                        ch = source.read();
+                    } while (Character.isDigit(ch));
+                } //added below
+                else {
+                    return makeToken(number, startPosition, endPosition,lineNumber); 
+                }
             } catch (Exception e) {
                 atEOF = true;
             }
