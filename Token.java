@@ -15,6 +15,7 @@ public class Token {
  *  Create a new Token based on the given Symbol
  *  @param leftPosition is the source file column where the Token begins
  *  @param rightPosition is the source file column where the Token ends
+ *  @param lineNumber is the line number where the Token can be found in the source
 */
   public Token(int leftPosition, int rightPosition, int lineNumber, Symbol sym) {
    this.leftPosition = leftPosition;

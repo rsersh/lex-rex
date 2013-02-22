@@ -17,7 +17,7 @@ public class Lexer {
     
     // positions in line of current token
     private int startPosition, endPosition, lineNumber; 
-    private boolean floatFlag = false;  //for literal tokens: type int or float
+    //private boolean floatFlag = false;  //for literal tokens: type int or float
 
     public Lexer(String sourceFile) throws Exception {
         new TokenType();  // init token table
@@ -143,6 +143,7 @@ public class Lexer {
             atEOF = true;
             return nextToken();
         }
+        
         startPosition = source.getPosition();
         endPosition = startPosition - 1;
         lineNumber = source.getLineno(); 
@@ -161,9 +162,11 @@ public class Lexer {
             }
             return newIdToken(id,startPosition,endPosition,lineNumber);
         } //end isJavaIdentifierStart
-        if (Character.isDigit(ch)) {
+        
+        else if (Character.isDigit(ch)) {
             // return number tokens
             String number = "";
+            //floatFlag = false;
             try {
                 do {
                     endPosition++;
@@ -171,9 +174,15 @@ public class Lexer {
                     ch = source.read();
                 } while (Character.isDigit(ch));  //integer case complete
                 ////////////////////////////////////
-                
-                if (Character.toString(ch).matches(".")) {
-                    floatFlag = true;
+              } catch (Exception e) {
+                atEOF = true;
+                }  
+             if ( (ch != '.') == false ) {
+                return newNumberToken(number,startPosition,endPosition,lineNumber,
+                    false);
+             } else {
+                   // floatFlag = true;
+                    try {
                     endPosition++;
                     number += ch;
                     ch = source.read();
@@ -184,18 +193,20 @@ public class Lexer {
                         number += ch;
                         ch = source.read();
                         } while (Character.isDigit(ch));
-                    } //end if (Character.isDigit(ch))  
-                }  //1.25 float case complete
-            } catch (Exception e) {
-                atEOF = true;
-            }
+                        
+                    } 
+                } catch (Exception e) {
+                        atEOF = true;
+                    }
+              }  //1.25 float case complete
+            
             return newNumberToken(number,startPosition,endPosition,lineNumber,
-                    floatFlag);
-        } //end Character.isDigit(ch)
+                    true);
+        } //end if Character.isDigit(ch)
         
         //if character is "." then it is a float that begins with a "." 
-        if (Character.toString(ch).matches(".")) {
-            floatFlag = true;
+        else if (ch == '.') {
+            //floatFlag = true;
             String number = "";
             //added 3 lines below
             endPosition++;
@@ -203,22 +214,30 @@ public class Lexer {
             
             try {
                 ch = source.read();
-                if (Character.isDigit(ch)) {
-                    do {
-                        endPosition++;
-                        number += ch;
-                        ch = source.read();
-                    } while (Character.isDigit(ch));
-                } //added below
-                else {
-                    return makeToken(number, startPosition, endPosition,lineNumber); 
-                }
+                //added below catch
             } catch (Exception e) {
                 atEOF = true;
             }
-            return newNumberToken(number,startPosition,endPosition,lineNumber,
-                    floatFlag);
-        } //end if character is a "."
+            
+            if (Character.isDigit(ch)) {  
+                try {
+                    do {
+                    endPosition++;
+                    number += ch;
+                    ch = source.read();
+                    } while (Character.isDigit(ch));
+                
+                } catch (Exception e) {
+                    atEOF = true;
+                }
+                return newNumberToken(number,startPosition,endPosition,lineNumber,
+                    true);
+            } else {  //single decimal case
+                return makeToken(number, startPosition, endPosition,lineNumber); 
+            }
+            
+            
+        } else {
         
         // At this point the only tokens to check for are one or two
         // characters; we must also check for comments that begin with
@@ -246,5 +265,7 @@ public class Lexer {
             op = charOld;
         }
         return makeToken(op,startPosition,endPosition,lineNumber);
-    }
+    
+        }
+     }
 }

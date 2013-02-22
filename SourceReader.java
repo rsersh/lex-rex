@@ -10,7 +10,7 @@ import java.util.ArrayList;
 */
 public class SourceReader {
     private BufferedReader source;
-    //for line-by-line access
+    //ArrayList for line-by-line access of source
     private static ArrayList<String> sourceLineList = new ArrayList<String>();   
     private int lineno = 0,   // line number of source program
         position;     // position of last character processed
@@ -46,7 +46,7 @@ public class SourceReader {
     	//System.out.println("Source file: "+sourceFile);
     	//System.out.println("user.dir: " + System.getProperty("user.dir"));
         source = new BufferedReader(new FileReader(sourceFile));
-        sourceLineList.add("DUMMY STRING");
+        sourceLineList.add("DUMMY STRING");  //for zero index
     }
 
     void close() {
@@ -68,7 +68,7 @@ public class SourceReader {
             nextLine = source.readLine();
             if (nextLine != null) {
                 System.out.println("READLINE:   "+nextLine);
-                 //add code here to save line to an array for public printArray function
+                 //add line to ArrayList
                 sourceLineList.add(nextLine);
             }
             isPriorEndLine = false;
@@ -104,7 +104,8 @@ public class SourceReader {
     }
     
 /**
- * @return the source file line-by-line, preceeded by line number
+ *  prints the source file line-by-line, preceeded by line number
+ *
 */
     public static void printSourceList() {
         int lineno;
