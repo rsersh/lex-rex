@@ -166,22 +166,19 @@ public class Lexer {
         else if (Character.isDigit(ch)) {
             // return number tokens
             String number = "";
-            //floatFlag = false;
             try {
                 do {
                     endPosition++;
                     number += ch;
                     ch = source.read();
                 } while (Character.isDigit(ch));  //integer case complete
-                ////////////////////////////////////
               } catch (Exception e) {
                 atEOF = true;
                 }  
-             if ( (ch != '.') == false ) {
+             if ((ch != '.')) {
                 return newNumberToken(number,startPosition,endPosition,lineNumber,
                     false);
              } else {
-                   // floatFlag = true;
                     try {
                     endPosition++;
                     number += ch;
@@ -198,17 +195,15 @@ public class Lexer {
                 } catch (Exception e) {
                         atEOF = true;
                     }
-              }  //1.25 float case complete
+              }  
             
             return newNumberToken(number,startPosition,endPosition,lineNumber,
                     true);
         } //end if Character.isDigit(ch)
         
-        //if character is "." then it is a float that begins with a "." 
+        //if character is "." then check if more digits 
         else if (ch == '.') {
-            //floatFlag = true;
             String number = "";
-            //added 3 lines below
             endPosition++;
             number += ch;
             
@@ -234,11 +229,8 @@ public class Lexer {
                     true);
             } else {  //single decimal case
                 return makeToken(number, startPosition, endPosition,lineNumber); 
-            }
-            
-            
+              }           
         } else {
-        
         // At this point the only tokens to check for are one or two
         // characters; we must also check for comments that begin with
         // 2 slashes
